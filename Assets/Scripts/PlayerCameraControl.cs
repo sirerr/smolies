@@ -5,8 +5,8 @@ using UnityEngine;
 public class PlayerCameraControl : MonoBehaviour
 {
     public PlayerFighting FightInfo;
-    public GameObject MainCam;
-    public GameObject AimCam;
+    public Camera MainCam;
+    public Camera AimCam;
 
     // Start is called before the first frame update
     void Start()
@@ -19,13 +19,14 @@ public class PlayerCameraControl : MonoBehaviour
     {
         if(FightInfo.CurrentFightMode == PlayerFighting.FightMode.gun)
         {
-            MainCam.SetActive(false);
-            AimCam.SetActive(true);
+            MainCam.enabled = false;
+            AimCam.enabled =true;
         }
         else
+        if(FightInfo.CurrentFightMode == PlayerFighting.FightMode.sword)
         {
-            MainCam.SetActive(true);
-            AimCam.SetActive(false);
+            MainCam.enabled = true;
+            AimCam.enabled = false;
         }
     }
 }

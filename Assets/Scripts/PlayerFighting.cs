@@ -10,12 +10,12 @@ public class PlayerFighting : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        DemoGameManager.demoGM.PFight = this;
     }
     private void Awake()
     {
         moves = GetComponent<PlayerInputMove>();
-        DemoGameManager.demoGM.PFight = this;
+        
     }
 
     // Update is called once per frame

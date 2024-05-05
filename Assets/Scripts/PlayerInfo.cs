@@ -14,11 +14,12 @@ public class PlayerInfo : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        DemoGameManager.demoGM.PInfo = this;
+      
     }
 
     void Start()
     {
+        DemoGameManager.demoGM.PInfo = this;
         playerhealth = playerhealthlimit;
       
     }
