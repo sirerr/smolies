@@ -18,22 +18,27 @@ public class PlayerInputMove : MonoBehaviour
     bool jumpress;
     bool fightpress;
     bool floatpress;
-    public bool modepress;
+   public bool modepress;
+    bool FirePress;
     CharacterController controller;
     float StartHeight;
     Quaternion rot;
-
+    public float VarSpeed = 10f;
+    float setSpeed = 0f;
 
     public Character CharacterRef;
     private CharacterJump Jumping;
     PlayerInfo playerinfo;
+    PlayerShooting PShooting;
 
     private void Awake()
     {
+        setSpeed = CharacterRef.maxWalkSpeed;
         input = new PlayerControls();
         playerinfo = GetComponent<PlayerInfo>();
         controller = GetComponent<CharacterController>();
         Jumping = GetComponentInParent<CharacterJump>();
+        PShooting = GetComponent<PlayerShooting>();
 
         input.CharacterControls.Movement.performed += ctx =>
         {
@@ -45,7 +50,7 @@ public class PlayerInputMove : MonoBehaviour
         input.CharacterControls.Fight.performed += ctx => fightpress = ctx.ReadValueAsButton();
         input.CharacterControls.Floating.performed += ctx => floatpress = ctx.ReadValueAsButton();
         input.CharacterControls.FightMode.performed += ctx => modepress = ctx.ReadValueAsButton();
-        
+        input.CharacterControls.Fire.performed += ctx => FirePress = ctx.ReadValueAsButton();
 
     }
 
@@ -82,7 +87,8 @@ public class PlayerInputMove : MonoBehaviour
         FightPlayer();
         // HandleRotation();
         FloatMove();
-
+        SetGunMode();
+        FireStuff();
 
 
     }
@@ -134,17 +140,19 @@ public class PlayerInputMove : MonoBehaviour
 
     void FloatMove()
     {
+        
         if(floatpress && playerinfo.playerEnergy >0)
         {
             if(playerinfo.UseEnergy)
             {
                 playerinfo.DecreasePlayerEnergy();
             }
-
+            CharacterRef.maxWalkSpeed = VarSpeed;
             anim.SetBool("makeFloat", true);
         }
         else
         {
+            CharacterRef.maxWalkSpeed = setSpeed;
             playerinfo.UseEnergy = true;
             anim.SetBool("makeFloat", false);
         }
@@ -182,6 +190,30 @@ public class PlayerInputMove : MonoBehaviour
 
     }
 
+    public void SetGunMode()
+    {
+        if(modepress)
+        {
+            anim.SetBool("closemode", true);
+        }
+        else
+        {
+            anim.SetBool("closemode", false);
+        }
+    }
+
+    public void FireStuff()
+    {
+        if(FirePress)
+        {
+           // print("pressing down");
+            PShooting.FireWeapon();
+        }else
+        {
+           // print("not pressing down");
+        }
+
+    }
   
 
 

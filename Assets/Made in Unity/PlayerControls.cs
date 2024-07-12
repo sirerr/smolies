@@ -98,6 +98,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateCam"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""20bba93c-6d0e-4945-89d9-18f166aeddff"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -105,7 +114,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""78e1c5e1-d0b8-414c-b2b6-3b4a6cc4e84d"",
                     ""path"": ""<Gamepad>/rightTrigger"",
-                    ""interactions"": """",
+                    ""interactions"": ""Press(behavior=2)"",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
                     ""action"": ""Fire"",
@@ -226,12 +235,67 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""b4b08fd5-fdc7-4cc9-a212-386cad1893a2"",
                     ""path"": ""<Gamepad>/leftTrigger"",
-                    ""interactions"": """",
+                    ""interactions"": ""Press(behavior=2)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""FightMode"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""803b0792-3d0c-4504-b5b2-f5f4eade92a3"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateCam"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""3e371e02-67e5-4a09-a34b-33843d27ad9c"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateCam"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""0fc2fe47-c7b3-4d05-a08e-f1ba60d45070"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateCam"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""fda7b5ff-3db8-4293-845b-4631bb697a0d"",
+                    ""path"": ""<Gamepad>/rightStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateCam"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""e45fd322-d136-4faa-ada7-3f453ad3c33e"",
+                    ""path"": ""<Gamepad>/rightStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateCam"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -260,6 +324,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_CharacterControls_Fight = m_CharacterControls.FindAction("Fight", throwIfNotFound: true);
         m_CharacterControls_Floating = m_CharacterControls.FindAction("Floating", throwIfNotFound: true);
         m_CharacterControls_FightMode = m_CharacterControls.FindAction("FightMode", throwIfNotFound: true);
+        m_CharacterControls_RotateCam = m_CharacterControls.FindAction("RotateCam", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -329,6 +394,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_CharacterControls_Fight;
     private readonly InputAction m_CharacterControls_Floating;
     private readonly InputAction m_CharacterControls_FightMode;
+    private readonly InputAction m_CharacterControls_RotateCam;
     public struct CharacterControlsActions
     {
         private @PlayerControls m_Wrapper;
@@ -341,6 +407,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Fight => m_Wrapper.m_CharacterControls_Fight;
         public InputAction @Floating => m_Wrapper.m_CharacterControls_Floating;
         public InputAction @FightMode => m_Wrapper.m_CharacterControls_FightMode;
+        public InputAction @RotateCam => m_Wrapper.m_CharacterControls_RotateCam;
         public InputActionMap Get() { return m_Wrapper.m_CharacterControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -374,6 +441,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @FightMode.started += instance.OnFightMode;
             @FightMode.performed += instance.OnFightMode;
             @FightMode.canceled += instance.OnFightMode;
+            @RotateCam.started += instance.OnRotateCam;
+            @RotateCam.performed += instance.OnRotateCam;
+            @RotateCam.canceled += instance.OnRotateCam;
         }
 
         private void UnregisterCallbacks(ICharacterControlsActions instance)
@@ -402,6 +472,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @FightMode.started -= instance.OnFightMode;
             @FightMode.performed -= instance.OnFightMode;
             @FightMode.canceled -= instance.OnFightMode;
+            @RotateCam.started -= instance.OnRotateCam;
+            @RotateCam.performed -= instance.OnRotateCam;
+            @RotateCam.canceled -= instance.OnRotateCam;
         }
 
         public void RemoveCallbacks(ICharacterControlsActions instance)
@@ -438,5 +511,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnFight(InputAction.CallbackContext context);
         void OnFloating(InputAction.CallbackContext context);
         void OnFightMode(InputAction.CallbackContext context);
+        void OnRotateCam(InputAction.CallbackContext context);
     }
 }

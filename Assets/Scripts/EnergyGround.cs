@@ -18,7 +18,7 @@ public class EnergyGround : MonoBehaviour
 
    IEnumerator StartTranfer()
     {
-        while(PlayerInSpace && EnergyAmount>0)
+        while(PlayerInSpace && EnergyAmount>0 && InfoRef.playerEnergy<InfoRef.playerEnergyLimit)
         {
             yield return new WaitForSeconds(TranferTimeSpeed);
             InfoRef.playerEnergy += TransferAmount;

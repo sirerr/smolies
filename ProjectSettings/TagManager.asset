@@ -8,6 +8,7 @@ TagManager:
   - sword
   - efloor
   - enemy
+  - bullet
   layers:
   - Default
   - TransparentFX

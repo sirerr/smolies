@@ -7,6 +7,7 @@ public class PlayerInfo : MonoBehaviour
     public float playerhealth = 0f;
     public float playerhealthlimit = 100f;
     public float playerEnergy = 0f;
+    public float playerEnergyLimit = 100f;
     public PlayerInputMove playerinput;
     public bool UseEnergy = true;
     public float DecreaseEnergySpeed = .25f;
